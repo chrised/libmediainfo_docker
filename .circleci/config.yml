@@ -1,0 +1,19 @@
+version: 2
+jobs:
+  build:
+    working_directory: /build
+    docker:
+      - image: docker:latest
+    steps:
+      - checkout
+      - setup_remote_docker
+      - run:
+        name: Build mono libmediainfo
+        command: |
+            docker build mono -t chrised/mono-libmediainfo:latest
+            docker push chrised/mono-libmediainfo:latest
+      - run:
+        name: Build dotnet libmediainfo
+        command: |
+            docker build dotnet -t chrised/dotnet-libmediainfo:latest
+            docker push chrised/dotnet-libmediainfo:latest
