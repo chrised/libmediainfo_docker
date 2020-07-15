@@ -12,6 +12,7 @@ jobs:
           name: Build mono libmediainfo
           command: |
             docker build mono -t chrised/mono-libmediainfo:latest
+            echo "${DOCKERHUB_API_KEY}" | docker login --username chrised --password-stdin
             docker push chrised/mono-libmediainfo:latest
   dotnet:
     working_directory: /build
@@ -24,6 +25,7 @@ jobs:
           name: Build dotnet libmediainfo
           command: |
             docker build dotnet -t chrised/dotnet-libmediainfo:latest
+            echo "${DOCKERHUB_API_KEY}" | docker login --username chrised --password-stdin
             docker push chrised/dotnet-libmediainfo:latest
 
 workflows:
