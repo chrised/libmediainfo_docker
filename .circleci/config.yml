@@ -14,7 +14,6 @@ jobs:
             docker build mono -t chrised/mono-libmediainfo:latest
             echo "$DOCKERHUB_API_KEY" | docker login --username chrised --password-stdin
             docker push chrised/mono-libmediainfo:latest
-          context: DockerHub
   dotnet:
     working_directory: /build
     docker:
@@ -28,27 +27,30 @@ jobs:
             docker build dotnet-core -t chrised/dotnet-libmediainfo:latest
             echo "$DOCKERHUB_API_KEY" | docker login --username chrised --password-stdin
             docker push chrised/dotnet-libmediainfo:latest
-          context: DockerHub
 
 workflows:
   commit:
     jobs:
       - mono:
+          context: DockerHub
           filters:
             branches:
               only: master
       - dotnet:
+          context: DockerHub
           filters:
             branches:
               only: master
-  # nightly:
-  #   triggers:
-  #     - schedule:
-  #         cron: "0 0 * * *"
-  #         filters:
-  #           branches:
-  #             only:
-  #               - master
-  #   jobs:
-  #     - mono
-  #     - dotnet
+  nightly:
+    triggers:
+      - schedule:
+          cron: "0 0 * * *"
+          filters:
+            branches:
+              only:
+                - master
+    jobs:
+      - mono:
+          context: DockerHub
+      - dotnet:
+          context: DockerHub
